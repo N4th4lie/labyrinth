@@ -19,8 +19,17 @@ image_icone = "images\lisasimpson.ico"
 # File Labyrinth.txt
 fic_labyrinth = "labyrinth.txt"
 
-# Images
+# Images of the labyrinth
 image_ground = "images\ground.jpg"
 image_wall = "images\wallbrick.png"
 image_finish = "images\door_open.png"
+
+# Characters and items
+macgyver_im = "images\macgyver.png"
+guard_im = "images\murdoc.png"
+item1_im = "images\item_needle.png"
+item2_im = "images\item_potion.png"
+item3_im = "images\item_tube.png"
+
+
 

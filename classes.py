@@ -16,23 +16,26 @@ from constants import *
 """ Labyrinth windows """
 class Labwindow:
 
-    def __init__(self, window, structure):
+    def __init__(self, window, structure, items):
         self.window = window
         self.structure = structure
-       
+        self.items = items
+        # Labwindow displays the list of items
+    
     def display(self):  
         
         # load images:
         ground = pygame.image.load(image_ground)
         wall = pygame.image.load(image_wall)
         finish = pygame.image.load(image_finish)
+        #guard = pygame.image.load(guard_im)
         # The finish line must contain transparence but problem occurs with convert()
         # finish = pygame.image.load(image_finish).convert_alpha()
     
         # Initialization
         self.window.blit(ground, (0,0))
         
-        # Run through the Labyrinth lines
+        # Run through the Labyrinth lines. Display them.
         for num_line,line in enumerate(self.structure):
             # Run through sprites of each line
             for num_sprite,sprite in enumerate(line):
@@ -44,6 +47,14 @@ class Labwindow:
                 elif sprite == 'F':
                     self.window.blit(finish, (x,y))
 
+        # If the items are ready, run through the items list.
+        for item in self.items:
+            self.window.blit(item.image, (item.x,item.y))
+        # Items counter :
+        arial_font = pygame.font.SysFont("Arial", 20)
+        items_counter = arial_font.render("Nombre d'objets collectés : "+str(3-len(self.items)), True, (223, 255, 0))
+        self.window.blit(items_counter, (10, 14*30))
+   
 """ Characters of the game """
 class Character:
 
