@@ -20,7 +20,7 @@ Contenu :
 
 To install and execute this game, you need to follow these steps:
 1. git clone https://github.com/n4th4lie/labyrinth.git && cd labyrinth
-2. python3 app.py on macos/linux or py -3 app.py on windows
+2. python3 macgyver.py on macos/linux or py -3 macgyver.py on windows
 
 If the dependencies are not installed, a virtual environment is automatically
 created with the needed requirements installed inside.
