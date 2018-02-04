@@ -8,20 +8,17 @@ Created on Tue Jan 23 15:44:00 2018
 import pygame
 import random
 
-
 # QUIT, KEYDOWN,...
 from pygame.locals import *
+# CONSTANTS: filenames, parameters,...
+from constants import *
+# CLASSES : Labwindow et Characters
+from classes import *
 
 pygame.init()
 
-""" CONSTANTS: filenames, parameters,..."""
-from constants import *
-
-""" CLASSES : Labwindow et Characters """
-from classes import *
-
 # Open a window
-window = pygame.display.set_mode((side_size,side_size))
+window = pygame.display.set_mode((side_size, side_size))
 pygame.display.set_caption(window_title)
 icone = pygame.image.load(image_icone)
 pygame.display.set_icon(icone)
@@ -33,7 +30,7 @@ pygame.display.set_icon(icone)
 with open(fic_labyrinth, "r", encoding="utf8") as f:
     labyrinth_structure = []
     for line in f:
-        line_level = [sprite for sprite in line if sprite!="\n"]
+        line_level = [sprite for sprite in line if sprite != "\n"]
         labyrinth_structure.append(line_level)
 
 # Create the labyrinth window
@@ -41,7 +38,7 @@ labyrinth = Labwindow(window, labyrinth_structure, [])
 # Display
 labyrinth.display()
 
-# Refresh the window               
+# Refresh the window
 pygame.display.flip()
 
 # To create the characters and the items, you need to know their position
@@ -52,39 +49,38 @@ pygame.display.flip()
 free = []
 for num_line, line in enumerate(labyrinth_structure):
     for num_sprite, case in enumerate(line):
-        if case=='S':
+        if case == 'S':
             start_case_x = num_sprite
             start_case_y = num_line
-        elif case=='F':
-            #finish_case_x = line.index('F')
+        elif case == 'F':
             finish_case_x = num_sprite
             finish_case_y = num_line
-        elif case=='n':
-            free.append((num_sprite,num_line))
-            
+        elif case == 'n':
+            free.append((num_sprite, num_line))
+
 # Create and display Mac Gyver
 macgyver = Character(macgyver_im, start_case_x, start_case_y)
 window.blit(macgyver.image, (macgyver.x, macgyver.y))
 
-# Randomize the items positions and create the items 
+# Randomize the items positions and create the items
 # nota: items have the same attributes as Character's objects
 labyrinth.items = []
 items_im = [item1_im, item2_im, item3_im]
-for i in range(0,3):
+for i in range(0, 3):
     n = random.randrange(0, len(free)-1)
-    labyrinth.items.append(Character(items_im[i],free[n][0],free[n][1]))
+    labyrinth.items.append(Character(items_im[i], free[n][0], free[n][1]))
     del free[n]
 
 # Display the items
 labyrinth.display()
 
-# Refresh the window               
+# Refresh the window
 pygame.display.flip()
 
 go_on = True
 game_over = False
 while go_on:
-    #Limitation speed for while
+    # Limitation speed for while
     pygame.time.Clock().tick(30)
 
     for event in pygame.event.get():
@@ -92,46 +88,48 @@ while go_on:
             go_on = False
         elif event.type == KEYDOWN:
             # Key Tab for moving Mac Gyver
-            if (not game_over) and event.key in (K_RIGHT, K_LEFT, K_UP, K_DOWN):
-                macgyver.move(str(event.key),labyrinth_structure)
- 
-               # if Mac Gyver is reaching an item, 
+            if (not game_over) and \
+                    event.key in (K_RIGHT, K_LEFT, K_UP, K_DOWN):
+                macgyver.move(str(event.key), labyrinth_structure)
+
+                # if Mac Gyver is reaching an item,
                 # collect it <-> delete the item from the list
-                for i,item in enumerate(labyrinth.items):
+                for i, item in enumerate(labyrinth.items):
                     if macgyver.x == item.x and macgyver.y == item.y:
                         del labyrinth.items[i]
-                        break    
+                        break
             # Quit game after the game over message has been read
-            if game_over :
-               go_on = False
-       
+            if game_over:
+                go_on = False
+
     # Display the labyrinth with items
     labyrinth.display()
     # Refresh the window with Mac Gyver's new position
     window.blit(macgyver.image, (macgyver.x, macgyver.y))
     pygame.display.flip()
-    
+
     # If Mac Gyver reached the finish:
     if macgyver.case_x == finish_case_x \
-       and macgyver.case_y == finish_case_y:
-          
+            and macgyver.case_y == finish_case_y:
         game_over = True
-        arial_font = pygame.font.SysFont("Arial", 20)
-        end_message2=arial_font.render("Appuis sur une touche pour quitter."\
-                                       +" Au revoir.", True, (223, 255, 0))
+        arial_font = pygame.font.SysFont("comicsansms", 20)
+        # arial_font = pygame.font.SysFont("Arial", 20)
+        end_message2 = arial_font.render(
+            "Appuis sur une touche pour quitter. Au revoir.",
+            True, (223, 255, 0))
         # Mac Gyver reached the finish case.
         # If no more items displayed on the window, you won or lost:
-        if labyrinth.items==[]:
-            end_message1=arial_font.render("FELICITATIONS !" \
-                                           + "Mac Gyver est libre !",\
-                                      True, (223, 255, 0))
+        if labyrinth.items == []:
+            end_message1 = arial_font.render(
+                "FÉLICITATIONS ! Mac Gyver est libre !",
+                True, (223, 255, 0))
         else:
-            end_message1=arial_font.render("PERDU !" \
-                                           + "Le gardien arrête Mac Gyver !",\
-                                      True, (223, 255, 0))
-        
-        window.blit(end_message1, (10, 5))
-        window.blit(end_message2, (10, 20))
+            end_message1 = arial_font.render(
+                "PERDU ! Le gardien arrête Mac Gyver !",
+                True, (223, 255, 0))
+
+        window.blit(end_message1, (10, 30))
+        window.blit(end_message2, (10, 50))
         pygame.display.flip()
 
 pygame.quit()

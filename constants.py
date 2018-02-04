@@ -30,6 +30,3 @@ guard_im = "images\murdoc.png"
 item1_im = "images\item_needle.png"
 item2_im = "images\item_potion.png"
 item3_im = "images\item_tube.png"
-
-
-
